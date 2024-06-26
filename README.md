@@ -1,4 +1,4 @@
-# Challenger Dev Python Senior N5
+# Challenger N5 - Dev Python Senior
 ## Instrucciones
 Se le encarga crear un sistema de registro de infracciones de tránsito en Python. El sistema debe tener las siguientes características:
 1. Debe existir una interfaz administrativa, donde puedan manejarse los siguientes registros:

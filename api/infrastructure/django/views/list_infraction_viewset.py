@@ -10,7 +10,7 @@ from api.infrastructure.django.views.decorators.view_response_handler import (
 from api.infrastructure.wirings.infraction_wirirng import InfractionWiring
 
 
-class LoadInfractionViewSet(ViewSet):
+class ListInfractionViewSet(ViewSet):
     permission_classes = []
     _infraction_use_case = InfractionWiring().instantiate()
 

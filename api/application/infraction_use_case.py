@@ -16,7 +16,9 @@ class InfractionUseCase:
         return infraction.to_dict()
 
     @generic_error_handler
-    def list_by_email(self, payload: Dict[str, str]) -> List[Dict[str, str]]:
+    def list_by_email(self, payload: Dict[str, str]) -> List[Dict[str, str]] or str:
         """Use case: list all infractions in database."""
         infractions = self._infraction_service.list_by_email(payload=payload)
+        if not infractions:
+            return "No registra infracciones"
         return [infraction.to_dict() for infraction in infractions]

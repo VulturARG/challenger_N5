@@ -22,7 +22,7 @@ def view_response_handler(
     success_status=status.HTTP_200_OK,
     generic_error_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
     global_status=status.HTTP_400_BAD_REQUEST,
-    warning_status=status.HTTP_202_ACCEPTED,
+    warning_status=status.HTTP_400_BAD_REQUEST,
     not_authorized_status=status.HTTP_401_UNAUTHORIZED,
     not_found_status=status.HTTP_404_NOT_FOUND,
 ):
@@ -31,7 +31,8 @@ def view_response_handler(
         def wrapper(*args, **kwargs):
             try:
                 response = func(*args, **kwargs)
-                return Response(response, status=success_status)
+                message = {"message": response}
+                return Response(message, status=success_status)
             except warning as error:
                 return Response(error.dict(), status=warning_status)
             except not_authorized as error:

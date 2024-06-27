@@ -16,6 +16,8 @@ class ListInfractionViewSet(ViewSet):
 
     @action(methods=["POST"], detail=False)
     @view_response_handler()
-    def generar_informe(self, request: Request, *args, **kwargs) -> List[Dict[str, str]]:
+    def generar_informe(
+        self, request: Request, *args, **kwargs
+    ) -> List[Dict[str, str]]:
         """Show all infractions by email."""
         return self._infraction_use_case.list_by_email(payload=request.data)

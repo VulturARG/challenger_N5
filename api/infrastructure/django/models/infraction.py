@@ -17,7 +17,7 @@ class Infraction(models.Model):
 
     def to_entity(self):
         return InfractionEntity(
-            vehicle_id=str(self.vehicle_id),
+            vehicle=self.vehicle.to_entity(),
             timestamp=self.timestamp,
             comments=self.comments,
         )

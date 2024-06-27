@@ -34,23 +34,22 @@ class InfractionAdapter(InfractionRepository):
     @transaction.atomic
     def create(self, payload: Dict[str, str]) -> InfractionEntity:
         """Adapter to create an infraction on database."""
+        serializer = self._infraction_serializer(data=payload)
+        if not serializer.is_valid():
+            raise SerializerError(serializer.errors)
+
         try:
             vehicle = self._vehicle.objects.select_for_update().get(
-                license_plate=payload["license_plate"]
+                license_plate=payload["placa_patente"]
             )
         except self._vehicle.DoesNotExist:
             raise ModelNotExistError(model=self._vehicle._meta.verbose_name)
 
-        infraction_data = {
-            "vehicle": vehicle.id,
-            "timestamp": payload["timestamp"],
-            "comments": payload["comments"],
-        }
-        serializer = self._infraction_serializer(data=infraction_data)
-        if not serializer.is_valid():
-            raise SerializerError(serializer.errors)
-
-        infraction = serializer.save()
+        infraction = self._infraction.objects.create(
+            vehicle=vehicle,
+            timestamp=serializer.validated_data["timestamp"],
+            comments=serializer.validated_data["comentarios"],
+        )
         return infraction.to_entity()
 
     @generic_error_handler
@@ -64,7 +63,7 @@ class InfractionAdapter(InfractionRepository):
         try:
             person = self._person.objects.get(email=email)
         except self._person.DoesNotExist:
-            return []
+            raise ModelNotExistError(model=self._person._meta.verbose_name)
 
         infractions = self._infraction.objects.filter(
             vehicle__person=person

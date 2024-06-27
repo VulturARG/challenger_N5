@@ -154,9 +154,8 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Challenger N5',
-    'DESCRIPTION': 'Dev Python Senior',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-
+    "TITLE": "Challenger N5",
+    "DESCRIPTION": "Dev Python Senior",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

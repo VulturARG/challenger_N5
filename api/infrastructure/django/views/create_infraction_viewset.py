@@ -6,7 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
 
-from api.infrastructure.django.serializers.infraction_serializer import InfractionSerializer
+from api.infrastructure.django.serializers.infraction_serializer import (
+    InfractionSerializer,
+)
 from api.infrastructure.django.views.decorators.view_response_handler import (
     view_response_handler,
 )
@@ -19,7 +21,7 @@ class CreateInfractionViewSet(ViewSet):
 
     @extend_schema(
         request=InfractionSerializer,
-        responses={200: OpenApiResponse(description='Success')}
+        responses={200: OpenApiResponse(description="Success")},
     )
     @action(methods=["POST"], detail=False)
     @view_response_handler()

@@ -17,8 +17,7 @@ class ListInfractionViewSet(ViewSet):
     _infraction_use_case = InfractionWiring().instantiate()
 
     @extend_schema(
-        request=EmailSerializer,
-        responses={200: OpenApiResponse(description='Success')}
+        request=EmailSerializer, responses={200: OpenApiResponse(description="Success")}
     )
     @action(methods=["POST"], detail=False)
     @view_response_handler()

@@ -152,3 +152,11 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=access_token_lifetime_minutes),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=refresh_token_lifetime_days),
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Challenger N5',
+    'DESCRIPTION': 'Dev Python Senior',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+
+}

@@ -1,12 +1,12 @@
 import logging
 from typing import Any, Dict
 
-from api.domain.exceptions.base_exceptions import ApiBaseException
+from api.domain.exceptions.base_exceptions import ApiBaseWarning
 
 logger = logging.getLogger(__name__)
 
 
-class SerializerException(ApiBaseException):
+class SerializerException(ApiBaseWarning):
     """Base class for all exceptions in this module."""
 
 

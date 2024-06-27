@@ -3,7 +3,7 @@ from functools import wraps
 from rest_framework import status
 from rest_framework.response import Response
 
-from api.domain.execptions.base_exceptions import (
+from api.domain.exceptions.base_exceptions import (
     ApiBaseException,
     ApiBaseWarning,
     ApiBaseGenericError,

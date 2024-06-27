@@ -3,7 +3,7 @@ import sys
 import traceback
 from typing import Optional
 
-from api.domain.execptions.base_exceptions import (
+from api.domain.exceptions.base_exceptions import (
     ApiBaseException,
     ApiBaseWarning,
     ApiBaseGenericError,

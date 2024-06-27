@@ -9,5 +9,10 @@ class Vehicle(models.Model):
         "Person", on_delete=models.CASCADE, related_name="vehicles"
     )
 
+    class Meta:
+        verbose_name = "Vehicle"
+        verbose_name_plural = "Vehicles"
+        ordering = ["license_plate"]
+
     def __str__(self):
         return self.license_plate

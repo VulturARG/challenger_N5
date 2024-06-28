@@ -1,11 +1,12 @@
+import uuid
 from datetime import datetime
 
 from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.domain.entities.infraction_entity import InfractionEntity
+from api.infrastructure.django.models import Officer
 from api.infrastructure.django.models.infraction import Infraction
 from api.infrastructure.django.tests.test_set_up import TestSetUp
 
@@ -20,8 +21,18 @@ class TestCreateInfractionView(TestSetUp):
             "timestamp": "2024-07-01 12:35:55",
             "comentarios": "comments",
         }
-        refresh = RefreshToken.for_user(self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
+
+        unique_id = str(uuid.uuid4())[:20]
+        officer_data = {
+            "name": "officer_1",
+            "unique_id": unique_id,
+        }
+        Officer.objects.create(**officer_data)
+        officer_token_url = reverse("token-officer-token")
+        response = self.client.post(officer_token_url, data=officer_data, format="json")
+        access_token = response.data["message"]["access"]
+
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
 
     def test_create_infraction_unauthenticated(self):
         expected = status.HTTP_401_UNAUTHORIZED

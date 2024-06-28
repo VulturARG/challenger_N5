@@ -1,48 +1,50 @@
 # Challenger N5 - Dev Python Senior
-## Instrucciones
-Se le encarga crear un sistema de registro de infracciones de tránsito en Python. El sistema debe tener las siguientes características:
-1. Debe existir una interfaz administrativa, donde puedan manejarse los siguientes registros:
-    1. Persona
-        1. Campos Nombre y Correo Electrónico
-    2. Vehículo
-        1. Campos placa de patente, marca, color. Deben estar relacionados con una persona
-    3. Oficial
-        1. Nombre y un número único identificatorio
+## Consideraciones generales
+De acuerdo a lo solicitado en los [requerimientos técnicos](docs/challenger.md) diseñé un sistema basado en los siguientes supuestos:
+- El sistema solicitado es parte de un sistema que seguirá creciendo en el futuro, incorporando nuevas funcionalidades.
+- El sistema debe poder escalar en un futuro.
+- Puede requerirse un cambio de alguna de las tecnologías usadas actualmente.
 
-La interfaz administrativa debe permitir crear, ver, modificar y borrar registros (debe garantizarse la integridad referencial). Puede construir la interfaz usted mismo, o usar cualquier generador de interfaces que le parezca conveniente.
+Por estas razones elegí un diseño basado en [arquitectura hexagonal](docs/arquitectura_hexagonal.md). 
+Esta arquitectura es una de las más usadas dentro de las Arquitecturas Limpias. 
+Utiliza los conceptos de Código Limpio, Principios SOLID y patrones de diseño, como por ejemplo el patrón repositorio entre otros.
+Consiste en aislar toda la lógica de negocios propia, de todo agente externo como ser framework, bases de datos, ORMs, etc.
+Dicha característica permite general código, escalable, reutilizable y fácilmente testeable.
 
-2. El sistema debe habilitar una API que permita a una App usada por los oficiales de policía cargar una infracción a un vehículo. Cree para esto una API con un método “cargar_infraccion”. Este debe recibir en el body y por método post, un JSON con la siguiente estructura:
-```json
-{
-  "placa_patente": "placa patente del vehículo",
-  "timestamp": "marca de tiempo de la infracción",
-  "comentarios": "texto libre"
-}
-```
-Para la autenticación, la API debe poder generar un token de acceso asociado a cada oficial de policía. Este token debe adjuntarse en Header de la llamada POST, usando la autenticación mediante Bearer Token. Este token puede generarse mediante una interfaz o mediante línea de comandos (en ese caso, documente cómo debe realizarse la llamada).
+En el caso en particular solicitado, soy consciente que puede ser considerado como una sobre-ingeniería del proyecto, al ser este un CRUD muy básico. 
+Dado que el objetivo de esta prueba es que se hagan una idea de mi forma de trabajo, me parece pertinente este diseño.
+Considero que Django REST Framework (DRF), es la herramienta que permite resolver los requerimientos, de la manera más rápida y eficiente posible.
 
-El llamado API debe devolver status 200 en caso que todo funcione correctamente, 404 en caso de haber algún parámetro no encontrado (patente que no exista) y 500 si hay un error inesperado. Debe devolver también un mensaje de error apropiado.
+## Consideraciones de diseño
+Como normas generales de desarrollo tengo los siguientes criterios:
+- **Nombres de variables, clases, funciones o métodos**: se nombran en inglés de acuerdo a las buenas prácticas a nivel mundial. Con excepción de lo expresamente indicado en español. La interfaz administrativa está en español, así como los nombre de las bases de datos que ve el usuario.
+- **Implementación de la API de DRF**: uso tres capas (directorios) para concretar la arquitectura elegida, con el uso del patrón Vertical Slice dentro de estos:
+  - **Infrastructure**: Capa donde están todos los elementos externos del sistema, como el DRF, la implementación de los adaptadores y la implementación de las inyecciones de dependencia. (Directorio Wirings). Es la capa externa del sistema.
+  - **Application**: Capa donde se gestionan los casos de uso del sistema. Es la capa intermedia del sistema.
+  - **Domain**: Capa donde se gestiona la logica de negocios de sistema. En ella están los servicios, que son los que implementan la lógica de negocios, los puestos o repositorios (Clases Abstractas) y las entidades que manejan los datos. Es la capa interna del sistema.
+- **Archivos**: Toda clase o función independiente debe ir en un archivo propio. El único lugar donde no se sigue esta regla es con las familias de excepciones.
+- **Manejo de errores propio**. Definición de una excepción base, de la cual heredan todas las demás excepciones. A su vez se definen varios tipos de excepciones básicas, a partir de las cuales se generan familias de excepciones de acuerdo a un tipo de error en particular. Este diseño permite definir un decorador que maneja los errores en los distintos métodos implementados, evitando la repetición de código. En el caso particular de DRF se usa un decorador en las vistas que estandariza el mensaje de respuesta de estas y a su vez de acuerdo a la familia de excepciones que llegue genera una respuesta de status HTTP.
+- **Cobertura de test**. El código debe tener la mayor cobertura de test posible. En este caso en particular, no se hicieron test unitarios, ya que no había logica de negocios a probar. Es por eso que se implementaron test E2E.
 
-3. Debe implementar un método API llamado “generar_informe”, el cual debe recibir como parámetro el correo electrónico de una persona, y devolver un JSON con el listado de infracciones de cualquier vehículo a su nombre. No es necesaria autenticación para este llamado.
-   
-4. Empaquete la solución en un Virtual Env y suba el código a un repositorio Github
-5. Por último, cree una imagen Docker que permita ejecutar todos los componentes de la solución (servidor de apps, bd, etc) y súbala al repo público de Docker, de forma que esta pueda ser descargada y ejecutada fácilmente.
-6. Proponga una arquitectura de servicios AWS que sea compatible con el despliegue de esta aplicación en producción. Haga un listado de los servicios que recomendaría y justifique su elección
+## Instalación, ejecución y pruebas automáticas
+- [Usando docker](docs/docker_install.md)
+- [Usando entorno virtual](docs/virtual_env_install.md)
 
-## Notas
 
-- Intencionalmente varios requerimientos son algo ambiguos. Haga los supuestos que estime conveniente para salvar estas dudas.
-- Asegúrese que el código de la app y cualquier librería usada sean compatibles con python 3.8 o superior.
-- No se evaluará estética ni usabilidad de interfaces, basta que funcionen.
-- Escriba este código haciendo uso de las buenas prácticas que considere razonables para este caso.
+## Uso del sistema
+Una vez generado el primer usuario se podrá acceder a la interfaz administrativa mediante el link http://127.0.0.1:8000/admin/, mediante las credenciales generadas previamente.
 
-## Entregables:
-- URL del repositorio Github con el código. Asegúrese que el repo sea público y que el archivo requirements.txt esté correctamente cargado.
-- URL de acceso a la imagen Docker de la aplicación
-- Documento que contenga:
-    - Supuestos
-    - En caso de tener comandos por CLI, un ejemplo de como llamarlos
-    - Claves de usuarios administrativos de la BD, en caso de haberlos
-    - Instrucciones de instalación y ejecución de Docker
-    - Arquitectura AWS propuesta.
-    - Cualquier otra cosa que considere relevante para evaluar este challenge
+Mediante el link http://127.0.0.1:8000/api/docs/ se podrá acceder a la documentación interactiva de la aplicación (Swagger) y probar los endpoints.
+
+### Procedimiento para cargar multas
+1. Mediante la interface administrativa completar los datos de las personas, vehículos y Oficiales que puedan acceder al sistema.
+2. El sistema que use el oficial, deberá requerir un token mediante una instrucción POST al endpoint **/api/officer_token/**.
+3. Una vez obtenido el mismo, se enviará una petición POST al endpoint **/api/cargar_infraccion/** para cargar la infracción.
+
+### Procedimiento para ver las multas
+1. El sistema que use el usuario, enviará una petición POST al endpoint **/api/generar_informe/** para recibir el listado de las infracciones que tenga.
+
+La información que se envia en el cuerpo de las peticiones está documentada en el link de swagger mencionado previamente.
+
+
+

@@ -11,7 +11,7 @@ Utiliza los conceptos de Código Limpio, Principios SOLID y patrones de diseño,
 Consiste en aislar toda la lógica de negocios propia, de todo agente externo como ser framework, bases de datos, ORMs, etc.
 Dicha característica permite general código, escalable, reutilizable y fácilmente testeable.
 
-En el caso en particular solicitado, soy consciente que puede ser considerado como una sobre-ingeniería del proyecto, al ser este un CRUD muy básico. 
+En el caso en particular solicitado, soy consciente que puede ser considerado como una sobre-ingeniería del proyecto, al ser este, un CRUD muy básico. 
 Dado que el objetivo de esta prueba es que se hagan una idea de mi forma de trabajo, me parece pertinente este diseño.
 Considero que Django REST Framework (DRF), es la herramienta que permite resolver los requerimientos, de la manera más rápida y eficiente posible.
 
@@ -45,6 +45,9 @@ Mediante el link http://127.0.0.1:8000/api/docs/ se podrá acceder a la document
 1. El sistema que use el usuario, enviará una petición POST al endpoint **/api/generar_informe/** para recibir el listado de las infracciones que tenga.
 
 La información que se envia en el cuerpo de las peticiones está documentada en el link de swagger mencionado previamente.
+
+## Implementación en producción
+De acuerdo a lo solicitado se presenta la siguiente [propuesta de implementación](docs/aws_proposal.md) en AWS.
 
 
 

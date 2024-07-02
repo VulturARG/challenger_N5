@@ -1,0 +1,39 @@
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/n5_challenge
+      - django-n5-data:/var/lib/django
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db_d_n5
+
+  db_d_n5:
+    image: postgres:16.3
+    environment:
+      - POSTGRES_DB=traffic_violation_system
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - db_d_n5-data:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+
+  adminer_d_n5:
+    image: adminer:latest
+    container_name: adminer_d_n5
+    environment:
+      ADMINER_DEFAULT_SERVER: db_d_n5
+    depends_on:
+      - db_d_n5
+    ports:
+      - "81:8080"
+    links:
+      - db_d_n5
+
+volumes:
+  db_d_n5-data:
+  django-n5-data:

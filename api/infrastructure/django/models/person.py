@@ -8,8 +8,8 @@ class Person(models.Model):
     email = models.EmailField(unique=True)
 
     class Meta:
-        verbose_name = "Person"
-        verbose_name_plural = "Persons"
+        verbose_name = "Persona"
+        verbose_name_plural = "Personas"
         ordering = ["name"]
 
     def to_entity(self):

@@ -6,8 +6,8 @@ class Officer(models.Model):
     unique_id = models.CharField(max_length=20, unique=True)
 
     class Meta:
-        verbose_name = "Officer"
-        verbose_name_plural = "Officers"
+        verbose_name = "Oficial"
+        verbose_name_plural = "Oficiales"
         ordering = ["name"]
 
     def __str__(self):

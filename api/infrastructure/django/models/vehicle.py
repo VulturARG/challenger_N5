@@ -12,8 +12,8 @@ class Vehicle(models.Model):
     )
 
     class Meta:
-        verbose_name = "Vehicle"
-        verbose_name_plural = "Vehicles"
+        verbose_name = "Vehiculo"
+        verbose_name_plural = "Vehículos"
         ordering = ["license_plate"]
 
     def to_entity(self) -> VehicleEntity:

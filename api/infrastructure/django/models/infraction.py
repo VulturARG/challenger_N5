@@ -11,8 +11,8 @@ class Infraction(models.Model):
     comments = models.TextField()
 
     class Meta:
-        verbose_name = "Infraction"
-        verbose_name_plural = "Infractions"
+        verbose_name = "Infracción"
+        verbose_name_plural = "Infracciones"
         ordering = ["vehicle"]
 
     def to_entity(self):
